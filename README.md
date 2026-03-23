@@ -77,23 +77,23 @@ Use the **↺ button** in the chat to reset between scenarios.
 4. Type `I want to return one of the books` → agent asks which book and why (multi-turn collection)
 5. Type `Grennlights, it was a duplicate order` → agent calls `process_return_request` and confirms with a return ID
 
-***Chat UI — initial state:**
+***Chat UI — initial state:***
 ![Chat UI](screenshots/chat_ui.png)
 
-***Order status lookup — agent calls tool, terminal shows real-time reasoning:**
+***Order status lookup — agent calls tool, terminal shows real-time reasoning:***
 ![Order lookup](screenshots/example1_order_lookup.png)
 
-***Return flow — multi-turn collection, return ID confirmed:**
+***Return flow — multi-turn collection, return ID confirmed:***
 ![Return confirmation](screenshots/example1_return_confirmation.png)
 
 **Scenario 2 — ORD-5678 (Processing order, business rule rejection):**
 1. Type `what is the status of order ORD-5678` → agent calls `get_order_status`, returns processing status with no tracking yet
 2. Type `I want to return Dune, I no longer want the item` → agent calls `process_return_request`, tool rejects it because order hasn't shipped, agent communicates the restriction
 
-***Order status lookup — agent calls tool, terminal shows real-time reasoning:**
+***Order status lookup — agent calls tool, terminal shows real-time reasoning:***
 ![Order lookup](screenshots/example2_order_lookup.png)
 
-***Return flow — multi-turn collection, return ID confirmed, tool rejects, agent communicates restriction:**
+***Return flow — multi-turn collection, return ID confirmed, tool rejects, agent communicates restriction:***
 ![Return confirmation](screenshots/example2_return_revoke.png)
 
 **Scenario 3 — Policy question (single tool call):**
@@ -105,7 +105,7 @@ Watch the terminal while chatting — every tool call prints in real time:
 → Tool result: {'success': True, 'order': {...}}
 ```
 
-***Policy Question:**
+***Policy Question:***
 ![Policy question](screenshots/example3_policy.png)
 
 ## Design Decisions
