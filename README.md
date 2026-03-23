@@ -2,6 +2,8 @@
 AI customer support agent for Bookly, a fictional online bookstore.
 Built for the Decagon Solutions Engineering take-home assignment.
 
+The intent of the design is to demonstrate the same core patterns behind Decagon's Agent Operating Procedures — a natural language rules layer, tool-enforced guardrails, and a ReAct loop that takes action rather than just answering questions.
+
 ## What It Does
 Conversational AI agent that handles:
 - **Order status inquiries** — looks up real-time order status and tracking

@@ -41,6 +41,16 @@ to give a complete response.
 
 ---
 
+## Assumptions
+- Customer is already authenticated when they open the chat (identity verification 
+  is out of scope for this demo but called out as the #1 production gap)
+- Order IDs are known to the customer — no search-by-email functionality implemented
+- Single-language support only — production would require i18n for Decagon's 
+  global enterprise customers like Deutsche Telekom
+- Conversation history is ephemeral by design — no cross-session memory implemented
+
+---
+
 ## Conversation & Decision Design
 
 **Intent Recognition**
@@ -167,6 +177,7 @@ action before stepping aside.
 | No rate limiting | Per-session rate limits to prevent abuse and order ID enumeration attacks |
 | Print statement logging | Structured JSON logs to integrated with an observability platform |
 | No conversation summarization | Summarize long histories to manage context window size and API cost |
+| Voice channel not implemented | Speech-to-text at input + text-to-speech at output. Agent loop, tools, and system prompt are identical — voice is a channel layer on top of the same core logic. Key additions: interruption handling, latency optimization, cross-channel memory so chat context carries into voice calls. |
 
 **Highest Priority Production Change:**
 Identity verification before any order data is surfaced. Currently any user
