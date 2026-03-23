@@ -22,7 +22,7 @@ Tool call requested?
 
 **Why a Loop Rather than a Single LLM Call:**
 A single API call can only produce one output. Some requests require sequential
-tool calls — for example, a return request may require checking an order status
+tool calls. For example, a return request may require checking an order status
 before initiating the return. The ReAct loop handles this naturally: each iteration
 is one reasoning step, and the agent continues until it has everything it needs
 to give a complete response.
@@ -44,10 +44,9 @@ to give a complete response.
 ## Assumptions
 - Customer is already authenticated when they open the chat (identity verification 
   is out of scope for this demo but called out as the #1 production gap)
-- Order IDs are known to the customer — no search-by-email functionality implemented
-- Single-language support only — production would require i18n for Decagon's 
-  global enterprise customers like Deutsche Telekom
-- Conversation history is ephemeral by design — no cross-session memory implemented
+- Order IDs are known to the customer (no search-by-email functionality implemented)
+- Single-language support only
+- Conversation history is ephemeral by design (no cross-session memory implemented)
 
 ---
 
@@ -56,7 +55,7 @@ to give a complete response.
 **Intent Recognition**
 Intent is handled implicitly by Claude's reasoning rather than a separate
 classifier. Given the narrow domain (order support), Claude reliably infers
-intent from free-form text without an additional classification step — reducing
+intent from free-form text without an additional classification step, thereby reducing
 system complexity without meaningful accuracy loss.
 
 **Decision Branches** encoded in the system prompt:
@@ -64,7 +63,7 @@ system complexity without meaningful accuracy loss.
 | Situation | Agent Behavior | Why |
 |-----------|---------------|-----|
 | Order question, no order ID provided | Ask for order ID before calling tool | Prevents tool call failure from missing required parameter |
-| Order question with order ID | Call `get_order_status` immediately | Tool is source of truth — agent never guesses status |
+| Order question with order ID | Call `get_order_status` immediately | Tool is source of truth and agent never guesses status |
 | Return request, all info present | Call `process_return_request` | All preconditions met, safe to act |
 | Return request, info missing | Ask follow-up questions across turns | Collects order ID, reason, and items incrementally |
 | Policy question | Call `lookup_policy` with category | Prevents agent citing stale or hallucinated policy details |
@@ -79,7 +78,7 @@ all confirmed. The agent's multi-turn collection behavior demonstrates this
 pattern at a conversational level.
 
 **Why Business Rules Live in Tool Code vs. The Prompt:**
-The prompt is natural language — it can be misinterpreted, edge-cased around,
+The prompt is natural language, meaning it can be misinterpreted, edge-cased around,
 or simply ignored under unusual inputs. Business rules with real consequences
 (like return eligibility) live in the tool code as hard logic. For example,
 `process_return_request` rejects returns for orders still in "processing" status
@@ -129,7 +128,7 @@ Each section maps to a specific failure mode it's designed to prevent. "ALWAYS
 call get_order_status" prevents the agent from estimating status from context.
 "Never confirm a return before calling the tool" prevents false expectations
 when a return is ineligible. The escalation tag `[ESCALATE]` is a structured
-signal a production backend would detect and route — not just a conversational
+signal a production backend would detect and route, not just a conversational
 courtesy. Tone instructions are placed last because they are the lowest priority
 constraint: they refine how the agent communicates, not what it does.
 
@@ -150,7 +149,7 @@ wrong order details.
 Eligibility logic lives in code, not the prompt. For example, `process_return_request`
 checks order status and rejects returns for orders still in "processing"
 regardless of what the natural language layer instructs. The tool is the
-last line of defense — it enforces rules that have financial consequences
+last line of defense, it enforces rules that have financial consequences
 and cannot be overridden by prompt manipulation or edge-case inputs.
 
 **3. Structured Escalation**
@@ -158,7 +157,7 @@ Explicit conditions in the system prompt trigger human handoff: suspected
 fraud, unresolved frustration, out-of-scope requests. The `[ESCALATE]` tag
 is a structured signal that a production backend would route to a human
 agent queue. In a real deployment this would trigger a ticket creation,
-queue assignment, and conversation summary handoff — the agent's last
+queue assignment, and conversation summary handoff, the agent's last
 action before stepping aside.
 
 ---
@@ -181,7 +180,7 @@ action before stepping aside.
 
 **Highest Priority Production Change:**
 Identity verification before any order data is surfaced. Currently any user
-who knows an order ID can retrieve its details — a significant security gap.
+who knows an order ID can retrieve its details, a significant security gap.
 In production, the agent would verify the customer's authenticated session
 or email address against the order record before `get_order_status` is
 permitted to execute. This is a code-level guardrail, not a prompt instruction,
@@ -191,6 +190,6 @@ because it must be enforced unconditionally.
 Replace prompt-level guardrails with code-level validation for all operations
 with financial consequences. Prompts can be edge-cased under adversarial
 inputs; tool-layer validation cannot. The return eligibility check in
-`process_return_request` demonstrates this pattern — the same approach should
+`process_return_request` demonstrates this pattern, the same approach should
 extend to refund limits, identity verification, and any action that touches
 customer financial data.
