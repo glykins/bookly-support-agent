@@ -15,9 +15,9 @@ ReAct (Reason + Act) agent loop built on Claude's tool-use API. The agent:
 3. If a tool is needed, executes it and incorporates the result
 4. Loops until it has enough information to give a final response
 
-**Tools:** `get_order_status`, `process_return_request`, `lookup_policy`
-**Model:** claude-sonnet-4-6 via Anthropic API
-**Frontend:** Simple web chat (Flask + vanilla JS)
+- **Tools:** `get_order_status`, `process_return_request`, `lookup_policy`
+- **Model:** claude-sonnet-4-6 via Anthropic API
+- **Frontend:** Simple web chat (Flask + vanilla JS)
 
 ## Project Structure
 ```

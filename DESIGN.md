@@ -5,7 +5,7 @@
 The agent uses a **ReAct (Reason + Act) loop** built on Anthropic's Claude API
 with native tool use. Each customer message is processed through a persistent
 conversation history alongside a system prompt that encodes Bookly's business
-logic — functionally equivalent to Decagon's Agent Operating Procedures (AOPs).
+logic, which are functionally equivalent to Agent Operating Procedures (AOPs).
 
 **Request Flow:**
 ```
